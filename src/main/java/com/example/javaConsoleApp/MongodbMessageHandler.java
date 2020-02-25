@@ -1,34 +1,30 @@
 package com.example.javaConsoleApp;
 
-import com.example.javaConsoleApp.messaging.MessageHandler;
-import com.example.javaConsoleApp.messaging.MessagingOperations;
 import com.example.javaConsoleApp.mongodb.model.Data;
-import com.mongodb.MongoSocketOpenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.jms.annotation.JmsListener;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class MongodbMessageHandler implements MessageHandler<String> {
+public class MongodbMessageHandler {
     @Autowired
     private ApplicationArguments args;
 
-    private MessagingOperations messaging;
     private MongoOperations mongo;
     private List<Data> buffer = new ArrayList<>();
     private int count = 0;
 
     Data data = null;
 
-    public MongodbMessageHandler(MessagingOperations messaging,
-                                 MongoOperations mongo) {
-        this.messaging = messaging;
+    public MongodbMessageHandler(MongoOperations mongo) {
         this.mongo = mongo;
     }
 
@@ -37,7 +33,7 @@ public class MongodbMessageHandler implements MessageHandler<String> {
         if (args.getSourceArgs().length > 0 && args.getSourceArgs()[0].equals("-p")) {
             buffer = mongo.findAll(Data.class);
             if (buffer.isEmpty()) {
-            log.warn("No entries found");
+                log.warn("No entries found");
             } else {
                 for (Data buffer : buffer) {
                     count++;
@@ -48,23 +44,25 @@ public class MongodbMessageHandler implements MessageHandler<String> {
         }
     }
 
-    @Override
-    public void onMessage(String message) {
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+    private CountDownLatch latch = new CountDownLatch(1);
+
+    public CountDownLatch getLatch() {
+        return latch;
+    }
+
+    @JmsListener(destination = "neotech.q")
+    public void receive(String message) {
         log.info("Took message from queue: {}", message);
         data = new Data();
         data.setCurrrentDate(message);
         saveData(data);
+        latch.countDown();
     }
 
     private void saveData(Data data) {
         try {
             log.info("Save to DB : {}", data.getCurrrentDate());
-//            mongo.collectionExists(Data.class);
             mongo.save(data);
         } catch (Exception ex) {
             log.warn("Error connecting to the database");

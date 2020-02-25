@@ -1,10 +1,9 @@
 package com.example.javaConsoleApp;
 
-import com.example.javaConsoleApp.messaging.MessagingOperations;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.SerializationUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -14,11 +13,11 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class DataWriter {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private MessagingOperations messaging;
+    private JmsTemplate jmsTemplate;
     String sbuffer = null;
 
-    public DataWriter(MessagingOperations messaging) {
-        this.messaging = messaging;
+    public DataWriter(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
     }
 
     @Scheduled(fixedDelay = 1000L)
@@ -28,7 +27,7 @@ public class DataWriter {
 
     private void writeCurrentDate() throws IOException {
         sbuffer = dtf.format(LocalDateTime.now());
-        messaging.publish("test",  SerializationUtils.serialize(sbuffer));
+        jmsTemplate.convertAndSend("neotech.q", sbuffer);
         log.info("Message sent to queue: {}", sbuffer);
     }
 }
