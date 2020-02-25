@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/testdb?serverSelectionTimeoutMS=5000
+messaging:
+  nats:
+    servers:
+      - 127.0.0.1:4222
+      - 127.0.0.1:4221
+
