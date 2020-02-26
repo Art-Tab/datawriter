@@ -5,7 +5,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -21,11 +20,11 @@ public class DataWriter {
     }
 
     @Scheduled(fixedDelay = 1000L)
-    private void timeout() throws IOException {
+    private void timeout() {
         writeCurrentDate();
     }
 
-    private void writeCurrentDate() throws IOException {
+    private void writeCurrentDate() {
         sbuffer = dtf.format(LocalDateTime.now());
         jmsTemplate.convertAndSend("neotech.q", sbuffer);
         log.info("Message sent to queue: {}", sbuffer);
