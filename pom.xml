@@ -10,7 +10,7 @@
 
 
     <groupId>com.example</groupId>
-    <artifactId>javaConsoleApp</artifactId>
+    <artifactId>datawriter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>datawriter</name>
     <description>Demo project for Spring Boot</description>
