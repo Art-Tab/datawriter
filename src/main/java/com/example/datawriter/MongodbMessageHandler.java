@@ -1,9 +1,11 @@
-package com.example.javaConsoleApp;
+package com.example.datawriter;
 
-import com.example.javaConsoleApp.mongodb.model.Data;
+import com.example.datawriter.mongodb.model.Data;
+import com.example.datawriter.mongodb.repository.DataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.jms.annotation.JmsListener;
 
@@ -18,24 +20,27 @@ public class MongodbMessageHandler {
     @Autowired
     private ApplicationArguments args;
 
+    DataRepository dataRepository;
     private MongoOperations mongo;
-    private List<Data> buffer = new ArrayList<>();
+  //  private List<Data> buffer = new ArrayList<>();
     private int count = 0;
 
     Data data = null;
 
-    public MongodbMessageHandler(MongoOperations mongo) {
+    public MongodbMessageHandler(MongoOperations mongo, DataRepository dataRepository ) {
         this.mongo = mongo;
+        this.dataRepository= dataRepository;
     }
 
     @PostConstruct
     private void init() {
         if (args.getSourceArgs().length > 0 && args.getSourceArgs()[0].equals("-p")) {
-            buffer = mongo.findAll(Data.class);
-            if (buffer.isEmpty()) {
+            List<Data> data = dataRepository.findAll();
+          //  data = mongo.findAll(Data.class);
+            if (data.isEmpty()) {
                 log.warn("No entries found");
             } else {
-                for (Data buffer : buffer) {
+                for (Data buffer : data) {
                     count++;
                     System.out.println(count + " Вывод:" + buffer.getCurrrentDate());
                 }
@@ -64,7 +69,7 @@ public class MongodbMessageHandler {
         try {
             log.info("Save to DB : {}", data.getCurrrentDate());
             mongo.save(data);
-        } catch (Exception ex) {
+        } catch (DataAccessResourceFailureException ex) {
             log.warn("Error connecting to the database");
             try {
                 TimeUnit.SECONDS.sleep(5);

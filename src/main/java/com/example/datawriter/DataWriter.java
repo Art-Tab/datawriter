@@ -1,4 +1,4 @@
-package com.example.javaConsoleApp;
+package com.example.datawriter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.core.JmsTemplate;

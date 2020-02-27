@@ -1,4 +1,4 @@
-package com.example.javaConsoleApp.mongodb.model;
+package com.example.datawriter.mongodb.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

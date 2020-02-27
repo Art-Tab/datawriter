@@ -1,4 +1,4 @@
-package com.example.javaConsoleApp.config;
+package com.example.datawriter.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

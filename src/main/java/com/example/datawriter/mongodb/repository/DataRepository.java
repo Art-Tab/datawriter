@@ -1,6 +1,6 @@
-package com.example.javaConsoleApp.mongodb.repository;
+package com.example.datawriter.mongodb.repository;
 
-import com.example.javaConsoleApp.mongodb.model.Data;
+import com.example.datawriter.mongodb.model.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

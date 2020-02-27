@@ -1,4 +1,4 @@
-package com.example.javaConsoleApp.config;
+package com.example.datawriter.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

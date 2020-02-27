@@ -1,6 +1,6 @@
-package com.example.javaConsoleApp;
+package com.example.datawriter;
 
-import com.example.javaConsoleApp.config.ActivemqProperties;
+import com.example.datawriter.config.ActivemqProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
