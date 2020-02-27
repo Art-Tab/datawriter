@@ -5,7 +5,7 @@ import com.example.datawriter.mongodb.repository.DataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.jms.annotation.JmsListener;
 
@@ -21,9 +21,9 @@ public class MongodbMessageHandler {
     private DataRepository dataRepository;
     private MongoOperations mongo;
 
-    public MongodbMessageHandler(MongoOperations mongo, DataRepository dataRepository ) {
+    public MongodbMessageHandler(MongoOperations mongo, DataRepository dataRepository) {
         this.mongo = mongo;
-        this.dataRepository= dataRepository;
+        this.dataRepository = dataRepository;
     }
 
     @PostConstruct
@@ -54,7 +54,7 @@ public class MongodbMessageHandler {
         try {
             log.info("Save to DB : {}", data.getCurrrentDate());
             mongo.save(data);
-        } catch (DataAccessResourceFailureException ex) {
+        } catch (DataAccessException ex) {
             log.warn("Error connecting to the database");
             try {
                 TimeUnit.SECONDS.sleep(5);
