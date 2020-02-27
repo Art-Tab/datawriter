@@ -10,9 +10,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.jms.annotation.JmsListener;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -20,9 +18,8 @@ public class MongodbMessageHandler {
     @Autowired
     private ApplicationArguments args;
 
-    DataRepository dataRepository;
+    private DataRepository dataRepository;
     private MongoOperations mongo;
-
 
     public MongodbMessageHandler(MongoOperations mongo, DataRepository dataRepository ) {
         this.mongo = mongo;
@@ -40,16 +37,9 @@ public class MongodbMessageHandler {
                     log.info(buffer.getCurrrentDate());
                 }
             }
-            log.info("Result {} records", data.size());
+            log.info("Result {} entries", data.size());
             System.exit(0);
         }
-    }
-
-
-    private CountDownLatch latch = new CountDownLatch(1);
-
-    public CountDownLatch getLatch() {
-        return latch;
     }
 
     @JmsListener(destination = "neotech.q")
@@ -58,7 +48,6 @@ public class MongodbMessageHandler {
         Data data = new Data();
         data.setCurrrentDate(message);
         saveData(data);
-        latch.countDown();
     }
 
     private void saveData(Data data) {
