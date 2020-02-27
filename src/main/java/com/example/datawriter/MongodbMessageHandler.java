@@ -22,10 +22,7 @@ public class MongodbMessageHandler {
 
     DataRepository dataRepository;
     private MongoOperations mongo;
-  //  private List<Data> buffer = new ArrayList<>();
-    private int count = 0;
 
-    Data data = null;
 
     public MongodbMessageHandler(MongoOperations mongo, DataRepository dataRepository ) {
         this.mongo = mongo;
@@ -34,6 +31,7 @@ public class MongodbMessageHandler {
 
     @PostConstruct
     private void init() {
+        int count = 0;
         if (args.getSourceArgs().length > 0 && args.getSourceArgs()[0].equals("-p")) {
             List<Data> data = dataRepository.findAll();
           //  data = mongo.findAll(Data.class);
@@ -59,7 +57,7 @@ public class MongodbMessageHandler {
     @JmsListener(destination = "neotech.q")
     public void receive(String message) {
         log.info("Took message from queue: {}", message);
-        data = new Data();
+        Data data = new Data();
         data.setCurrrentDate(message);
         saveData(data);
         latch.countDown();
