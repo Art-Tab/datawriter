@@ -33,7 +33,6 @@ public class MongodbMessageHandler {
     private void init() {
         if (args.getSourceArgs().length > 0 && args.getSourceArgs()[0].equals("-p")) {
             List<Data> data = dataRepository.findAll();
-          //  data = mongo.findAll(Data.class);
             if (data.isEmpty()) {
                 log.warn("No entries found");
             } else {
