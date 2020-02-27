@@ -31,7 +31,6 @@ public class MongodbMessageHandler {
 
     @PostConstruct
     private void init() {
-        int count = 0;
         if (args.getSourceArgs().length > 0 && args.getSourceArgs()[0].equals("-p")) {
             List<Data> data = dataRepository.findAll();
           //  data = mongo.findAll(Data.class);
@@ -39,10 +38,10 @@ public class MongodbMessageHandler {
                 log.warn("No entries found");
             } else {
                 for (Data buffer : data) {
-                    count++;
-                    System.out.println(count + " Вывод:" + buffer.getCurrrentDate());
+                    log.info(buffer.getCurrrentDate());
                 }
             }
+            log.info("Result {} records", data.size());
             System.exit(0);
         }
     }
