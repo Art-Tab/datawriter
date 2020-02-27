@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableConfigurationProperties(ActivemqProperties.class)
 @EnableScheduling
 @EnableJms
-public class JavaConsoleApplication {
+public class DataWriterApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(JavaConsoleApplication.class, args);
+		SpringApplication.run(DataWriterApplication.class, args);
 	}
 }
