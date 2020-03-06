@@ -24,7 +24,7 @@ public class DataWriter {
         writeCurrentDate();
     }
 
-    private void writeCurrentDate() {
+    public void writeCurrentDate() {
         sbuffer = dtf.format(LocalDateTime.now());
         jmsTemplate.convertAndSend("neotech.q", sbuffer);
         log.info("Sent message to queue: {}", sbuffer);
