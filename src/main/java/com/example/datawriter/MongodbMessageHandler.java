@@ -29,15 +29,7 @@ public class MongodbMessageHandler {
     @PostConstruct
     private void init() {
         if (args.getSourceArgs().length > 0 && args.getSourceArgs()[0].equals("-p")) {
-            List<Data> data = dataRepository.findAll();
-            if (data.isEmpty()) {
-                log.warn("No entries found");
-            } else {
-                for (Data buffer : data) {
-                    log.info(buffer.getCurrrentDate());
-                }
-            }
-            log.info("Result {} entries", data.size());
+            logFindData(dataRepository);
             System.exit(0);
         }
     }
@@ -63,5 +55,17 @@ public class MongodbMessageHandler {
             }
             saveData(data);
         }
+    }
+
+    public void logFindData(DataRepository dataRepository){
+        List<Data> data = dataRepository.findAll();
+        if (data.isEmpty()) {
+            log.warn("No entries found");
+        } else {
+            for (Data buffer : data) {
+                log.info(buffer.getCurrrentDate());
+            }
+        }
+        log.info("Result {} entries", data.size());
     }
 }
