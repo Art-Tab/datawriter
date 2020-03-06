@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -75,9 +76,7 @@ public class MongodbMessageHandlerTest {
 
         assertEquals(data.size(), logsList.size() - 1);
 
-        for (int i = 0; i < data.size(); i++) {
-            assertEquals(data.get(i).getCurrrentDate(), logsList.get(i).getMessage());
-        }
+        IntStream.range(0, data.size()).forEach(i -> assertEquals(data.get(i).getCurrrentDate(), logsList.get(i).getMessage()));
     }
 
     @Test
